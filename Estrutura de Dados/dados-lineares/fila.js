@@ -1,7 +1,7 @@
-// 5. Fila (Queue)
-// Crie uma fila e implemente as operações de enqueue e dequeue.
+// fila.js
+// Exercício 5a: Fila Simples
 
-class Fila {
+class FilaSimples {
     constructor() {
         this.itens = [];
     }
@@ -11,25 +11,28 @@ class Fila {
     }
 
     dequeue() {
-        if (this.vazia()) return null;
-        return this.itens.shift(); // O(n) – mas para simplicidade, usamos shift
+        if (this.isEmpty()) return null;
+        return this.itens.shift(); // O(n) – deslocamento
     }
 
-    vazia() {
+    isEmpty() {
         return this.itens.length === 0;
     }
 
-    frente() {
-        if (this.vazia()) return null;
-        return this.itens[0];
+    front() {
+        return this.isEmpty() ? null : this.itens[0];
+    }
+
+    size() {
+        return this.itens.length;
     }
 }
 
-// Teste básico
-let fila = new Fila();
-fila.enqueue(1);
-fila.enqueue(2);
-fila.enqueue(3);
-console.log("Fila:", fila.itens); // [1,2,3]
-console.log("Dequeue:", fila.dequeue()); // 1
-console.log("Fila após dequeue:", fila.itens); // [2,3]
+// Teste
+let fila = new FilaSimples();
+fila.enqueue(10);
+fila.enqueue(20);
+fila.enqueue(30);
+console.log("Dequeue:", fila.dequeue()); // 10
+console.log("Front:", fila.front()); // 20
+console.log("Tamanho:", fila.size()); // 2

@@ -1,56 +1,48 @@
-// 4. Pilha (Stack)
-// Implemente uma pilha e adicione operações para verificar se a pilha está cheia ou vazia.
-// Utilize uma pilha para verificar se uma expressão aritmética contém parênteses balanceados.
-
 class Pilha {
-    constructor(tamanhoMaximo = 100) {
+    constructor(tamanho) {
         this.itens = [];
-        this.tamanhoMaximo = tamanhoMaximo;
+        this.tamanho = tamanho;
     }
 
     push(valor) {
-        if (this.cheia()) {
-            console.log("Pilha cheia!");
+        if (this.isFull()) {
+            console.log("Pilha cheia");
             return;
         }
         this.itens.push(valor);
     }
 
     pop() {
-        if (this.vazia()) return null;
+        if (this.isEmpty()) {
+            return null;
+        }
         return this.itens.pop();
     }
 
-    top() {
-        if (this.vazia()) return null;
+    peek() {
         return this.itens[this.itens.length - 1];
     }
 
-    vazia() {
+    isEmpty() {
         return this.itens.length === 0;
     }
 
-    cheia() {
-        return this.itens.length >= this.tamanhoMaximo;
+    isFull() {
+        return this.itens.length === this.tamanho;
     }
 }
 
-// Função para verificar parênteses balanceados
-function parentesesBalanceados(expressao) {
-    let pilha = new Pilha();
-    for (let char of expressao) {
-        if (char === '(') {
-            pilha.push(char);
-        } else if (char === ')') {
-            if (pilha.vazia()) return false; // fecha sem abrir
+// verificar parênteses balanceados
+function parentesesBalanceados(expr) {
+    const pilha = [];
+
+    for (let c of expr) {
+        if (c === "(") pilha.push(c);
+        if (c === ")") {
+            if (pilha.length === 0) return false;
             pilha.pop();
         }
     }
-    return pilha.vazia(); // se vazia, todos foram fechados
-}
 
-// Testes
-let expressao1 = "((1+2) * (3/4))";
-let expressao2 = "((1+2) * (3/4)";
-console.log(`"${expressao1}" balanceado?`, parentesesBalanceados(expressao1)); // true
-console.log(`"${expressao2}" balanceado?`, parentesesBalanceados(expressao2)); // false
+    return pilha.length === 0;
+}

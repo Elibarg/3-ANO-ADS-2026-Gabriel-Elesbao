@@ -1,7 +1,6 @@
-// 7. Contagem de Nós em uma Lista Encadeada (recursiva)
-// Implemente uma função recursiva que conte o número de nós em uma lista encadeada.
+// lista-encadeada-contagem.js
+// Exercício 7: Contagem de nós em lista encadeada (recursiva)
 
-// Reaproveitando a classe No
 class No {
     constructor(valor) {
         this.valor = valor;
@@ -10,17 +9,14 @@ class No {
 }
 
 function contarNos(no) {
-    if (!no) return 0; // caso base
+    if (!no) return 0;
     return 1 + contarNos(no.proximo);
 }
+// Complexidade tempo: O(n), espaço: O(n)
 
-// Lista de exemplo
-let head = new No(1);
-head.proximo = new No(2);
-head.proximo.proximo = new No(3);
-
-console.log("Número de nós:", contarNos(head)); // 3
-
-// Análise:
-// Tempo: O(n) – percorre cada nó uma vez.
-// Espaço: O(n) – devido à pilha de recursão (cada chamada ocupa memória).
+// Teste
+let lista = new No(10);
+lista.proximo = new No(20);
+lista.proximo.proximo = new No(30);
+lista.proximo.proximo.proximo = new No(40);
+console.log("Número de nós:", contarNos(lista)); // 4

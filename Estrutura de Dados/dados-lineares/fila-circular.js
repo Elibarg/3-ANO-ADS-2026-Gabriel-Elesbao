@@ -1,4 +1,5 @@
-// Fila Circular (implementada com array e ponteiros para evitar deslocamento)
+// fila-circular.js
+// Exercício 5b: Fila Circular (implementada com array e ponteiros)
 
 class FilaCircular {
     constructor(tamanho) {
@@ -58,4 +59,4 @@ filaCirc.enqueue(50);
 filaCirc.enqueue(60);
 filaCirc.exibir(); // 20 30 40 50 60
 // Ao tentar inserir mais um, deve dar "Fila cheia!"
-filaCirc.enqueue(70);
+filaCirc.enqueue(70); // Fila cheia!
