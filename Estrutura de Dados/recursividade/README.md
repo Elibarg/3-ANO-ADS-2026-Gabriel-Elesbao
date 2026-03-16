@@ -1,47 +1,42 @@
 # Recursividade
 
-Este módulo apresenta exemplos de algoritmos recursivos utilizando JavaScript.
+Este módulo explora o conceito de recursividade através de implementações clássicas e sua aplicação em estruturas de dados.
 
-## Conteúdo
+## Algoritmos implementados
 
 - Fatorial recursivo
-- Sequência de Fibonacci
-- Travessia de árvore binária
-- Soma de lista encadeada
-- Busca em árvore binária de busca
+- Sequência de Fibonacci (ingênuo e com memoization)
+- Travessias em árvore binária (in‑order, pre‑order, post‑order)
+- Soma dos elementos de uma lista encadeada (recursiva)
+- Busca em árvore binária de busca (BST)
 - Torre de Hanói
+- Contagem de nós em lista encadeada
 
-## O que é Recursividade
+## Conceitos
 
-Recursividade é uma técnica onde uma função chama a si mesma para resolver partes menores de um problema.
+### Recursividade
+Técnica onde uma função chama a si mesma para resolver subproblemas. Toda função recursiva precisa de um caso base e deve progredir em direção a ele.
 
-Uma função recursiva possui três elementos fundamentais:
-
-- Caso base
-- Chamada recursiva
-- Progresso em direção ao caso base
-
-## Exemplos clássicos
-
-- Fatorial
-- Fibonacci
-- Travessia de árvores
-- Torre de Hanói
+### Análise de desempenho
+- Fatorial: O(n)
+- Fibonacci ingênuo: O(2ⁿ)
+- Fibonacci com memoization: O(n)
+- Busca em BST balanceada: O(log n)
 
 ## Linguagem
 
-Todos os algoritmos foram implementados em **JavaScript**.
+Todos os exemplos foram implementados em **JavaScript**.
 
 ## Como executar
 
 Navegue até a pasta `recursividade` e execute cada arquivo com Node.js:
 
 ```bash
-cd "Estrutura de Dados/recursividade"
-node fatorial.js
-node fibonacci.js
-node arvore.js
-node lista-encadeada-soma.js
-node lista-encadeada-contagem.js
-node torre-hanoi.js
-node busca-bst.js
+cd "recursividade"
+node atividade1.js
+node atividade2.js
+node atividade3.js
+node atividade4.js
+node atividade5.js
+node atividade6.js
+node atividade7.js
