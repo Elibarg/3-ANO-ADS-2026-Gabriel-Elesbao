@@ -1,20 +1,27 @@
-class NoLista {
+// 7. Contagem de nós em uma lista encadeada (recursiva)
+
+class Node {
     constructor(valor) {
         this.valor = valor;
         this.proximo = null;
     }
 }
 
-function contarNos(no) {
-    if (!no) return 0;
-    return 1 + contarNos(no.proximo);
+function contarNos(node) {
+    // Caso base: lista vazia
+    if (node === null) return 0;
+    // 1 (nó atual) + contagem do restante
+    return 1 + contarNos(node.proximo);
 }
 
-// Lista: 5 -> 10 -> 15
-const head = new NoLista(5);
-head.proximo = new NoLista(10);
-head.proximo.proximo = new NoLista(15);
+// Criando lista: 5 -> 15 -> 25 -> 35
+const head = new Node(5);
+head.proximo = new Node(15);
+head.proximo.proximo = new Node(25);
+head.proximo.proximo.proximo = new Node(35);
 
-console.log('Número de nós:', contarNos(head)); // 3
-// Complexidade de tempo: O(n) – percorre cada nó uma vez.
-// Complexidade de espaço: O(n) devido à pilha de chamadas recursivas.
+console.log('Número de nós na lista:', contarNos(head)); // 4
+
+// Análise:
+// Tempo: O(n) (percorre cada nó uma vez)
+// Espaço (pilha de recursão): O(n) no pior caso (lista linear)

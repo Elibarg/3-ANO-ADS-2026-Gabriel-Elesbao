@@ -1,3 +1,5 @@
+// 2. Lista Simplesmente Encadeada
+
 class Node {
     constructor(valor) {
         this.valor = valor;
@@ -8,48 +10,52 @@ class Node {
 class ListaSimples {
     constructor() {
         this.head = null;
+        this.tamanho = 0;
     }
 
     // Inserir no início
-    inserirInicio(valor) {
+    inserirNoInicio(valor) {
         const novo = new Node(valor);
         novo.proximo = this.head;
         this.head = novo;
+        this.tamanho++;
     }
 
     // Inserir no final
-    inserirFinal(valor) {
+    inserirNoFinal(valor) {
         const novo = new Node(valor);
         if (!this.head) {
             this.head = novo;
-            return;
+        } else {
+            let atual = this.head;
+            while (atual.proximo) {
+                atual = atual.proximo;
+            }
+            atual.proximo = novo;
         }
-        let atual = this.head;
-        while (atual.proximo) {
-            atual = atual.proximo;
-        }
-        atual.proximo = novo;
+        this.tamanho++;
     }
 
-    // Remover de posição específica (0‑based)
-    removerPosicao(posicao) {
-        if (posicao < 0 || !this.head) return null;
+    // Remover de posição específica (0-based)
+    removerNaPosicao(posicao) {
+        if (posicao < 0 || posicao >= this.tamanho) {
+            console.log('Posição inválida');
+            return null;
+        }
+        let removido;
         if (posicao === 0) {
-            const removido = this.head.valor;
+            removido = this.head;
             this.head = this.head.proximo;
-            return removido;
+        } else {
+            let atual = this.head;
+            for (let i = 0; i < posicao - 1; i++) {
+                atual = atual.proximo;
+            }
+            removido = atual.proximo;
+            atual.proximo = atual.proximo.proximo;
         }
-        let anterior = null;
-        let atual = this.head;
-        let contador = 0;
-        while (atual && contador < posicao) {
-            anterior = atual;
-            atual = atual.proximo;
-            contador++;
-        }
-        if (!atual) return null; // posição inválida
-        anterior.proximo = atual.proximo;
-        return atual.valor;
+        this.tamanho--;
+        return removido.valor;
     }
 
     // Buscar elemento por valor (retorna índice ou -1)
@@ -64,7 +70,7 @@ class ListaSimples {
         return -1;
     }
 
-    // Método auxiliar para exibir a lista
+    // Exibir lista
     exibir() {
         const valores = [];
         let atual = this.head;
@@ -78,11 +84,14 @@ class ListaSimples {
 
 // Testes
 const lista = new ListaSimples();
-lista.inserirInicio(10);
-lista.inserirInicio(5);
-lista.inserirFinal(20);
-lista.inserirFinal(30);
+lista.inserirNoInicio(10);
+lista.inserirNoInicio(5);
+lista.inserirNoFinal(20);
+lista.inserirNoFinal(30);
 lista.exibir(); // 5 -> 10 -> 20 -> 30
-console.log('Buscar 20:', lista.buscar(20)); // 2
-console.log('Remover pos 1:', lista.removerPosicao(1)); // 10
-lista.exibir(); // 5 -> 20 -> 30
+
+console.log('Removido na posição 2:', lista.removerNaPosicao(2)); // 20
+lista.exibir(); // 5 -> 10 -> 30
+
+console.log('Buscar 10:', lista.buscar(10)); // 1
+console.log('Buscar 99:', lista.buscar(99)); // -1

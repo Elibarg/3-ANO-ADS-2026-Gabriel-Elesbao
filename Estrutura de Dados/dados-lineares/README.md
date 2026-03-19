@@ -47,10 +47,9 @@ Todos os exemplos foram implementados em **JavaScript**.
 Navegue até a pasta `dados-lineares` e execute cada arquivo com Node.js:
 
 ```bash
-cd "dados-lineares"
+cd "Estrutura de Dados/dados-lineares"
 node atividade1.js
 node atividade2.js
 node atividade3.js
 node atividade4.js
 node atividade5.js
-node atividade6.js

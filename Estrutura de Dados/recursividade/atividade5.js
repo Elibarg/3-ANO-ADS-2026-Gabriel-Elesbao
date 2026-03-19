@@ -1,32 +1,43 @@
-class NoBST {
-    constructor(valor) {
-        this.valor = valor;
-        this.esquerda = null;
-        this.direita = null;
+// 5. Busca em Árvore Binária de Busca (BST)
+
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
     }
 }
 
-function buscarBST(raiz, alvo) {
-    if (!raiz) return false;
-    if (raiz.valor === alvo) return true;
-    if (alvo < raiz.valor) return buscarBST(raiz.esquerda, alvo);
-    else return buscarBST(raiz.direita, alvo);
+// Inserção para construir a BST (auxiliar)
+function inserir(node, value) {
+    if (node === null) return new Node(value);
+    if (value < node.value) node.left = inserir(node.left, value);
+    else if (value > node.value) node.right = inserir(node.right, value);
+    return node;
 }
 
-// Construindo BST:
-//        5
-//       / \
-//      3   8
-//     / \   \
-//    2   4   9
-const raizBST = new NoBST(5);
-raizBST.esquerda = new NoBST(3);
-raizBST.direita = new NoBST(8);
-raizBST.esquerda.esquerda = new NoBST(2);
-raizBST.esquerda.direita = new NoBST(4);
-raizBST.direita.direita = new NoBST(9);
+// Busca recursiva
+function buscar(node, valor) {
+    if (node === null) return false; // não encontrado
+    if (node.value === valor) return true;
+    if (valor < node.value) return buscar(node.left, valor);
+    else return buscar(node.right, valor);
+}
 
-console.log('Buscar 4:', buscarBST(raizBST, 4)); // true
-console.log('Buscar 7:', buscarBST(raizBST, 7)); // false
+// Construindo uma BST de exemplo
+let root = null;
+root = inserir(root, 50);
+inserir(root, 30);
+inserir(root, 20);
+inserir(root, 40);
+inserir(root, 70);
+inserir(root, 60);
+inserir(root, 80);
 
-// Complexidade: O(h) onde h é a altura da árvore. Em uma árvore balanceada, O(log n). No pior caso (degenerada), O(n).
+// Testes de busca
+console.log('Buscar 40:', buscar(root, 40)); // true
+console.log('Buscar 90:', buscar(root, 90)); // false
+
+// Análise de complexidade:
+// Em uma BST balanceada, a altura é O(log n), então busca O(log n).
+// No pior caso (árvore degenerada), a altura é O(n) e a busca O(n).

@@ -1,44 +1,46 @@
-class HashEncadeamento {
+// 2. Tabela Hash com Encadeamento
+
+class TabelaHashEncadeamento {
     constructor(tamanho = 10) {
         this.tamanho = tamanho;
         this.tabela = new Array(tamanho).fill(null).map(() => []);
     }
 
-    hash(chave) {
-        if (typeof chave === 'number') return chave % this.tamanho;
-        // para string, usar soma dos códigos
-        let soma = 0;
-        for (let i = 0; i < chave.length; i++) soma += chave.charCodeAt(i);
-        return soma % this.tamanho;
+    // Função hash simples (para inteiros)
+    _hash(key) {
+        return key % this.tamanho;
     }
 
-    inserir(chave, valor) {
-        const indice = this.hash(chave);
-        const lista = this.tabela[indice];
-        // Verifica se chave já existe
+    // Inserir par (chave, valor)
+    inserir(key, value) {
+        const index = this._hash(key);
+        const lista = this.tabela[index];
+        // Verifica se a chave já existe e atualiza
         for (let par of lista) {
-            if (par.chave === chave) {
-                par.valor = valor; // atualiza
+            if (par.key === key) {
+                par.value = value;
                 return;
             }
         }
-        lista.push({ chave, valor });
+        lista.push({ key, value });
     }
 
-    buscar(chave) {
-        const indice = this.hash(chave);
-        const lista = this.tabela[indice];
+    // Buscar valor por chave
+    buscar(key) {
+        const index = this._hash(key);
+        const lista = this.tabela[index];
         for (let par of lista) {
-            if (par.chave === chave) return par.valor;
+            if (par.key === key) return par.value;
         }
-        return null;
+        return null; // não encontrado
     }
 
-    remover(chave) {
-        const indice = this.hash(chave);
-        const lista = this.tabela[indice];
+    // Remover elemento por chave
+    remover(key) {
+        const index = this._hash(key);
+        const lista = this.tabela[index];
         for (let i = 0; i < lista.length; i++) {
-            if (lista[i].chave === chave) {
+            if (lista[i].key === key) {
                 lista.splice(i, 1);
                 return true;
             }
@@ -46,20 +48,30 @@ class HashEncadeamento {
         return false;
     }
 
-    // Para depuração
+    // Exibir conteúdo da tabela
     exibir() {
-        this.tabela.forEach((lista, i) => {
-            console.log(`${i}:`, lista.map(p => `(${p.chave}:${p.valor})`).join(' '));
-        });
+        for (let i = 0; i < this.tamanho; i++) {
+            if (this.tabela[i].length > 0) {
+                console.log(`[${i}] ->`, this.tabela[i].map(p => `(${p.key}:${p.value})`).join(' '));
+            } else {
+                console.log(`[${i}] -> vazio`);
+            }
+        }
     }
 }
 
-// Teste
-const hashEnc = new HashEncadeamento(5);
-hashEnc.inserir('nome', 'João');
-hashEnc.inserir('idade', 30);
-hashEnc.inserir('cidade', 'São Paulo');
-console.log('Buscar nome:', hashEnc.buscar('nome')); // João
-hashEnc.remover('idade');
-console.log('Buscar idade:', hashEnc.buscar('idade')); // null
+// Testes
+const hashEnc = new TabelaHashEncadeamento();
+hashEnc.inserir(15, 'quinze');
+hashEnc.inserir(25, 'vinte e cinco');
+hashEnc.inserir(35, 'trinta e cinco');
+hashEnc.inserir(45, 'quarenta e cinco');
+hashEnc.inserir(5, 'cinco'); // colide com 15 (15%10 =5, 5%10=5)
+hashEnc.exibir();
+
+console.log('\nBuscar 25:', hashEnc.buscar(25)); // vinte e cinco
+console.log('Buscar 99:', hashEnc.buscar(99));   // null
+
+hashEnc.remover(15);
+console.log('\nApós remover 15:');
 hashEnc.exibir();

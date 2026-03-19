@@ -1,46 +1,57 @@
-// Função de hash que distribui uniformemente para tabela tamanho 100
-function hashPersonalizada(str, tamanho = 100) {
+// 7. Função de Hash Personalizada para Strings e Análise de Colisões
+
+const TAMANHO_TABELA = 100;
+const CONJUNTOS = {
+    animais: ['cachorro', 'gato', 'elefante', 'leao', 'tigre', 'girafa', 'zebra', 'macaco', 'pato', 'galinha', 'vaca', 'cavalo', 'ovelha', 'peixe', 'tubarao'],
+    frutas: ['banana', 'maca', 'laranja', 'uva', 'pera', 'abacaxi', 'manga', 'morango', 'kiwi', 'melancia', 'limao', 'cereja', 'pessego', 'goiaba', 'coco'],
+    cores: ['vermelho', 'azul', 'verde', 'amarelo', 'roxo', 'laranja', 'rosa', 'marrom', 'cinza', 'preto', 'branco', 'bege', 'violeta', 'indigo', 'ouro']
+};
+
+// Função de hash personalizada: polinômio (base 31)
+function hashPersonalizada(str, tamanho) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
-        hash = (hash * 31 + str.charCodeAt(i)) % tamanho; // polinômio com primo 31
+        hash = (hash * 31 + str.charCodeAt(i)) % tamanho;
     }
     return hash;
 }
 
-// Testar distribuição
-function testarDistribuicao(listaStrings, tamanho = 100) {
-    const contador = new Array(tamanho).fill(0);
-    listaStrings.forEach(s => {
-        const idx = hashPersonalizada(s, tamanho);
-        contador[idx]++;
-    });
+// Função para testar distribuição
+function testarDistribuicao(conjunto, nomeConjunto) {
+    const indices = new Array(TAMANHO_TABELA).fill(0);
+    for (let palavra of conjunto) {
+        const idx = hashPersonalizada(palavra, TAMANHO_TABELA);
+        indices[idx]++;
+    }
 
-    // Estatísticas simples
-    const ocupados = contador.filter(v => v > 0).length;
-    const max = Math.max(...contador);
-    const min = Math.min(...contador.filter(v => v > 0));
-    const media = listaStrings.length / ocupados;
-    const colisoes = listaStrings.length - ocupados; // cada índice ocupado tem pelo menos 1, o resto são colisões adicionais
+    // Estatísticas
+    const total = conjunto.length;
+    const colisoes = indices.filter(v => v > 1).reduce((acc, v) => acc + (v - 1), 0);
+    const percentualColisoes = (colisoes / total) * 100;
+    const maxOcupado = Math.max(...indices);
+    const posicoesOcupadas = indices.filter(v => v > 0).length;
 
-    console.log(`Tamanho tabela: ${tamanho}`);
-    console.log(`Índices ocupados: ${ocupados} de ${tamanho}`);
-    console.log(`Máximo elementos por índice: ${max}`);
-    console.log(`Mínimo elementos por índice (não zero): ${min}`);
-    console.log(`Média elementos por índice ocupado: ${media.toFixed(2)}`);
-    console.log(`Total de elementos: ${listaStrings.length}`);
-    console.log(`Colisões totais (elementos - índices ocupados): ${colisoes}`);
-    // Mostrar distribuição (compacta)
-    console.log('Distribuição (primeiros 20 índices):', contador.slice(0,20));
+    console.log(`\nConjunto: ${nomeConjunto} (${total} palavras)`);
+    console.log(`  Índices gerados:`, indices.slice(0, 20).map((v,i) => v > 0 ? `${i}:${v}` : '').filter(Boolean).join(', ') + (indices.length>20?'...':''));
+    console.log(`  Total de colisões (elementos extras): ${colisoes}`);
+    console.log(`  Percentual de colisões: ${percentualColisoes.toFixed(2)}%`);
+    console.log(`  Posições ocupadas: ${posicoesOcupadas} de ${TAMANHO_TABELA}`);
+    console.log(`  Máximo de elementos em uma posição: ${maxOcupado}`);
 }
 
-// Gerar 500 strings aleatórias
-function gerarStrings(quantidade, tamMin = 3, tamMax = 10) {
+// Executar testes
+for (let [nome, conjunto] of Object.entries(CONJUNTOS)) {
+    testarDistribuicao(conjunto, nome);
+}
+
+// Teste com um conjunto maior (gerado aleatoriamente)
+function gerarPalavras(qtd) {
     const letras = 'abcdefghijklmnopqrstuvwxyz';
     const palavras = [];
-    for (let i = 0; i < quantidade; i++) {
-        let len = Math.floor(Math.random() * (tamMax - tamMin + 1)) + tamMin;
+    for (let i = 0; i < qtd; i++) {
+        let tam = Math.floor(Math.random() * 8) + 3; // 3 a 10 letras
         let palavra = '';
-        for (let j = 0; j < len; j++) {
+        for (let j = 0; j < tam; j++) {
             palavra += letras[Math.floor(Math.random() * letras.length)];
         }
         palavras.push(palavra);
@@ -48,6 +59,7 @@ function gerarStrings(quantidade, tamMin = 3, tamMax = 10) {
     return palavras;
 }
 
-const palavrasTeste = gerarStrings(500);
-testarDistribuicao(palavrasTeste, 100);
-// Para melhorar a distribuição, ajustar o multiplicador (ex: 31) e garantir que o módulo seja um número primo.
+const grandes = gerarPalavras(200);
+testarDistribuicao(grandes, '200 palavras aleatórias');
+
+// Sugestão de ajuste: testar com base 131 ou usando operações XOR.

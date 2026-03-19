@@ -1,8 +1,37 @@
-class No {
-    constructor(valor) {
-        this.valor = valor;
-        this.esquerda = null;
-        this.direita = null;
+// 3. Travessias em Árvore Binária (in-order, pre-order, post-order)
+
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+// Percurso in-order (esquerda, raiz, direita)
+function inOrder(node) {
+    if (node !== null) {
+        inOrder(node.left);
+        console.log(node.value);
+        inOrder(node.right);
+    }
+}
+
+// Percurso pre-order (raiz, esquerda, direita)
+function preOrder(node) {
+    if (node !== null) {
+        console.log(node.value);
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+}
+
+// Percurso post-order (esquerda, direita, raiz)
+function postOrder(node) {
+    if (node !== null) {
+        postOrder(node.left);
+        postOrder(node.right);
+        console.log(node.value);
     }
 }
 
@@ -12,39 +41,17 @@ class No {
 //      2   3
 //     / \
 //    4   5
-const raiz = new No(1);
-raiz.esquerda = new No(2);
-raiz.direita = new No(3);
-raiz.esquerda.esquerda = new No(4);
-raiz.esquerda.direita = new No(5);
-
-function inOrder(no) {
-    if (no) {
-        inOrder(no.esquerda);
-        console.log(no.valor);
-        inOrder(no.direita);
-    }
-}
-
-function preOrder(no) {
-    if (no) {
-        console.log(no.valor);
-        preOrder(no.esquerda);
-        preOrder(no.direita);
-    }
-}
-
-function postOrder(no) {
-    if (no) {
-        postOrder(no.esquerda);
-        postOrder(no.direita);
-        console.log(no.valor);
-    }
-}
+const root = new Node(1);
+root.left = new Node(2);
+root.right = new Node(3);
+root.left.left = new Node(4);
+root.left.right = new Node(5);
 
 console.log('In-order:');
-inOrder(raiz); // 4 2 5 1 3
+inOrder(root);   // 4 2 5 1 3
+
 console.log('Pre-order:');
-preOrder(raiz); // 1 2 4 5 3
+preOrder(root);  // 1 2 4 5 3
+
 console.log('Post-order:');
-postOrder(raiz); // 4 5 2 3 1
+postOrder(root); // 4 5 2 3 1

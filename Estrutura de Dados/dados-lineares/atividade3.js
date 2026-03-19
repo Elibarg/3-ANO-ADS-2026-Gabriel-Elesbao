@@ -1,3 +1,5 @@
+// 3. Lista Duplamente Encadeada
+
 class NodeDuplo {
     constructor(valor) {
         this.valor = valor;
@@ -10,34 +12,37 @@ class ListaDupla {
     constructor() {
         this.head = null;
         this.tail = null;
+        this.tamanho = 0;
     }
 
     // Inserir no início
-    inserirInicio(valor) {
+    inserirNoInicio(valor) {
         const novo = new NodeDuplo(valor);
         if (!this.head) {
             this.head = this.tail = novo;
-            return;
+        } else {
+            novo.proximo = this.head;
+            this.head.anterior = novo;
+            this.head = novo;
         }
-        novo.proximo = this.head;
-        this.head.anterior = novo;
-        this.head = novo;
+        this.tamanho++;
     }
 
     // Remover do final
-    removerFinal() {
+    removerDoFinal() {
         if (!this.tail) return null;
-        const removido = this.tail.valor;
-        if (this.head === this.tail) { // apenas um nó
+        const removido = this.tail;
+        if (this.head === this.tail) {
             this.head = this.tail = null;
-            return removido;
+        } else {
+            this.tail = this.tail.anterior;
+            this.tail.proximo = null;
         }
-        this.tail = this.tail.anterior;
-        this.tail.proximo = null;
-        return removido;
+        this.tamanho--;
+        return removido.valor;
     }
 
-    // Percorrer da esquerda para a direita e imprimir
+    // Percorrer da head à tail (direção normal)
     percorrerFrente() {
         const valores = [];
         let atual = this.head;
@@ -45,10 +50,10 @@ class ListaDupla {
             valores.push(atual.valor);
             atual = atual.proximo;
         }
-        console.log('Frente:', valores.join(' <-> '));
+        console.log('Head -> Tail:', valores.join(' <-> '));
     }
 
-    // Percorrer da direita para a esquerda e imprimir
+    // Percorrer da tail à head (direção inversa)
     percorrerTras() {
         const valores = [];
         let atual = this.tail;
@@ -56,16 +61,17 @@ class ListaDupla {
             valores.push(atual.valor);
             atual = atual.anterior;
         }
-        console.log('Trás:  ', valores.join(' <-> '));
+        console.log('Tail -> Head:', valores.join(' <-> '));
     }
 }
 
 // Testes
-const listaD = new ListaDupla();
-listaD.inserirInicio(30);
-listaD.inserirInicio(20);
-listaD.inserirInicio(10);
-listaD.percorrerFrente(); // 10 <-> 20 <-> 30
-listaD.percorrerTras();   // 30 <-> 20 <-> 10
-console.log('Remover final:', listaD.removerFinal()); // 30
-listaD.percorrerFrente(); // 10 <-> 20
+const listaDupla = new ListaDupla();
+listaDupla.inserirNoInicio(30);
+listaDupla.inserirNoInicio(20);
+listaDupla.inserirNoInicio(10);
+listaDupla.percorrerFrente(); // 10 <-> 20 <-> 30
+listaDupla.percorrerTras();    // 30 <-> 20 <-> 10
+
+console.log('Removido do final:', listaDupla.removerDoFinal()); // 30
+listaDupla.percorrerFrente(); // 10 <-> 20

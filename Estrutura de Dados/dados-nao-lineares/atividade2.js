@@ -1,97 +1,152 @@
-class NoBST {
-    constructor(valor) {
-        this.valor = valor;
-        this.esquerda = null;
-        this.direita = null;
+// 2. Árvore AVL com inserção e remoção
+
+class NodeAVL {
+    constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+        this.height = 1; // altura da subárvore
     }
 }
 
-class BST {
+class AVLTree {
     constructor() {
-        this.raiz = null;
+        this.root = null;
     }
 
-    inserir(valor) {
-        this.raiz = this._inserirRec(this.raiz, valor);
+    // Retorna a altura do nó
+    altura(node) {
+        return node ? node.height : 0;
     }
 
-    _inserirRec(no, valor) {
-        if (!no) return new NoBST(valor);
-        if (valor < no.valor) no.esquerda = this._inserirRec(no.esquerda, valor);
-        else if (valor > no.valor) no.direita = this._inserirRec(no.direita, valor);
-        return no;
+    // Atualiza a altura do nó
+    atualizarAltura(node) {
+        node.height = Math.max(this.altura(node.left), this.altura(node.right)) + 1;
     }
 
-    buscar(valor) {
-        return this._buscarRec(this.raiz, valor);
+    // Fator de balanceamento
+    fatorBalanceamento(node) {
+        return node ? this.altura(node.left) - this.altura(node.right) : 0;
     }
 
-    _buscarRec(no, valor) {
-        if (!no) return false;
-        if (no.valor === valor) return true;
-        return valor < no.valor
-            ? this._buscarRec(no.esquerda, valor)
-            : this._buscarRec(no.direita, valor);
+    // Rotação à direita
+    rotacaoDireita(y) {
+        const x = y.left;
+        const T2 = x.right;
+
+        x.right = y;
+        y.left = T2;
+
+        this.atualizarAltura(y);
+        this.atualizarAltura(x);
+        return x;
     }
 
-    remover(valor) {
-        this.raiz = this._removerRec(this.raiz, valor);
+    // Rotação à esquerda
+    rotacaoEsquerda(x) {
+        const y = x.right;
+        const T2 = y.left;
+
+        y.left = x;
+        x.right = T2;
+
+        this.atualizarAltura(x);
+        this.atualizarAltura(y);
+        return y;
     }
 
-    _removerRec(no, valor) {
-        if (!no) return null;
-        if (valor < no.valor) {
-            no.esquerda = this._removerRec(no.esquerda, valor);
-            return no;
-        } else if (valor > no.valor) {
-            no.direita = this._removerRec(no.direita, valor);
-            return no;
+    // Inserção
+    inserir(value) {
+        this.root = this._inserir(this.root, value);
+    }
+
+    _inserir(node, value) {
+        if (!node) return new NodeAVL(value);
+
+        if (value < node.value) {
+            node.left = this._inserir(node.left, value);
+        } else if (value > node.value) {
+            node.right = this._inserir(node.right, value);
         } else {
-            // Caso 1: nó folha
-            if (!no.esquerda && !no.direita) return null;
-            // Caso 2: um filho
-            if (!no.esquerda) return no.direita;
-            if (!no.direita) return no.esquerda;
-            // Caso 3: dois filhos – pegar o menor da subárvore direita (sucessor)
-            let sucessor = this._menorValor(no.direita);
-            no.valor = sucessor;
-            no.direita = this._removerRec(no.direita, sucessor);
-            return no;
+            return node; // valores duplicados não permitidos
         }
+
+        this.atualizarAltura(node);
+        return this.balancear(node);
     }
 
-    _menorValor(no) {
-        let atual = no;
-        while (atual.esquerda) atual = atual.esquerda;
-        return atual.valor;
+    // Remoção
+    remover(value) {
+        this.root = this._remover(this.root, value);
     }
 
-    // Para visualização
-    inOrder() {
-        const res = [];
-        this._inOrderRec(this.raiz, res);
-        return res;
+    _remover(node, value) {
+        if (!node) return null;
+
+        if (value < node.value) {
+            node.left = this._remover(node.left, value);
+        } else if (value > node.value) {
+            node.right = this._remover(node.right, value);
+        } else {
+            // Casos de remoção
+            if (!node.left || !node.right) {
+                node = node.left || node.right;
+            } else {
+                // Nó com dois filhos: pegar o sucessor (menor da direita)
+                let sucessor = node.right;
+                while (sucessor.left) sucessor = sucessor.left;
+                node.value = sucessor.value;
+                node.right = this._remover(node.right, sucessor.value);
+            }
+        }
+
+        if (!node) return null;
+
+        this.atualizarAltura(node);
+        return this.balancear(node);
     }
 
-    _inOrderRec(no, res) {
-        if (no) {
-            this._inOrderRec(no.esquerda, res);
-            res.push(no.valor);
-            this._inOrderRec(no.direita, res);
+    // Balanceamento após inserção/remoção
+    balancear(node) {
+        const fb = this.fatorBalanceamento(node);
+
+        // Rotação à direita
+        if (fb > 1 && this.fatorBalanceamento(node.left) >= 0) {
+            return this.rotacaoDireita(node);
+        }
+        // Rotação à esquerda
+        if (fb < -1 && this.fatorBalanceamento(node.right) <= 0) {
+            return this.rotacaoEsquerda(node);
+        }
+        // Rotação dupla esquerda-direita
+        if (fb > 1 && this.fatorBalanceamento(node.left) < 0) {
+            node.left = this.rotacaoEsquerda(node.left);
+            return this.rotacaoDireita(node);
+        }
+        // Rotação dupla direita-esquerda
+        if (fb < -1 && this.fatorBalanceamento(node.right) > 0) {
+            node.right = this.rotacaoDireita(node.right);
+            return this.rotacaoEsquerda(node);
+        }
+        return node;
+    }
+
+    // Exibição in-order
+    inOrder(node = this.root) {
+        if (node) {
+            this.inOrder(node.left);
+            console.log(node.value);
+            this.inOrder(node.right);
         }
     }
 }
 
-// Teste
-const bst = new BST();
-bst.inserir(50);
-bst.inserir(30);
-bst.inserir(70);
-bst.inserir(20);
-bst.inserir(40);
-bst.inserir(60);
-bst.inserir(80);
-console.log('BST in-order:', bst.inOrder()); // [20,30,40,50,60,70,80]
-console.log('Buscar 40:', bst.buscar(40));   // true
-bst.remover(40);
-console.log('Após remover 40:', bst.inOrder()); // [20,30,50,60,70,80]
+// Teste AVL
+const avl = new AVLTree();
+[10, 20, 30, 40, 50, 25].forEach(v => avl.inserir(v));
+console.log('AVL in-order após inserções:');
+avl.inOrder(); // 10 20 25 30 40 50
+
+avl.remover(40);
+console.log('Após remover 40:');
+avl.inOrder(); // 10 20 25 30 50

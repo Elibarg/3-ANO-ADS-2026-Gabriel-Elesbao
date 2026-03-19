@@ -1,78 +1,85 @@
-class MaxHeap {
+// 4. Grafos com lista de adjacência, DFS e BFS
+
+class Grafo {
     constructor() {
-        this.heap = [];
+        this.lista = {}; // { vertice: [vizinhos] }
     }
 
-    inserir(valor) {
-        this.heap.push(valor);
-        this._subir(this.heap.length - 1);
+    adicionarVertice(v) {
+        if (!this.lista[v]) this.lista[v] = [];
     }
 
-    _subir(indice) {
-        while (indice > 0) {
-            const pai = Math.floor((indice - 1) / 2);
-            if (this.heap[indice] <= this.heap[pai]) break;
-            [this.heap[indice], this.heap[pai]] = [this.heap[pai], this.heap[indice]];
-            indice = pai;
+    adicionarAresta(v1, v2, direcionado = false) {
+        if (!this.lista[v1]) this.adicionarVertice(v1);
+        if (!this.lista[v2]) this.adicionarVertice(v2);
+        this.lista[v1].push(v2);
+        if (!direcionado) this.lista[v2].push(v1);
+    }
+
+    // DFS iterativo usando pilha
+    dfs(inicio) {
+        const visitados = new Set();
+        const pilha = [inicio];
+
+        console.log('DFS a partir de', inicio);
+        while (pilha.length > 0) {
+            const v = pilha.pop();
+            if (!visitados.has(v)) {
+                console.log(v);
+                visitados.add(v);
+                // Adiciona vizinhos não visitados (inverter para manter ordem)
+                const vizinhos = this.lista[v] || [];
+                for (let i = vizinhos.length - 1; i >= 0; i--) {
+                    if (!visitados.has(vizinhos[i])) pilha.push(vizinhos[i]);
+                }
+            }
         }
     }
 
-    removerMaior() {
-        if (this.heap.length === 0) return null;
-        if (this.heap.length === 1) return this.heap.pop();
-        const maior = this.heap[0];
-        this.heap[0] = this.heap.pop();
-        this._descer(0);
-        return maior;
-    }
+    // BFS iterativo usando fila
+    bfs(inicio) {
+        const visitados = new Set();
+        const fila = [inicio];
 
-    _descer(indice) {
-        const tamanho = this.heap.length;
-        while (true) {
-            let maior = indice;
-            const esq = 2 * indice + 1;
-            const dir = 2 * indice + 2;
-            if (esq < tamanho && this.heap[esq] > this.heap[maior]) maior = esq;
-            if (dir < tamanho && this.heap[dir] > this.heap[maior]) maior = dir;
-            if (maior === indice) break;
-            [this.heap[indice], this.heap[maior]] = [this.heap[maior], this.heap[indice]];
-            indice = maior;
+        console.log('BFS a partir de', inicio);
+        while (fila.length > 0) {
+            const v = fila.shift();
+            if (!visitados.has(v)) {
+                console.log(v);
+                visitados.add(v);
+                const vizinhos = this.lista[v] || [];
+                for (const viz of vizinhos) {
+                    if (!visitados.has(viz)) fila.push(viz);
+                }
+            }
         }
     }
 
-    tamanho() {
-        return this.heap.length;
+    // Exibir lista
+    exibir() {
+        console.log('Lista de Adjacência:');
+        for (let v in this.lista) {
+            console.log(v, '->', this.lista[v].join(', '));
+        }
     }
 }
 
-// Fila de prioridade usando o MaxHeap
-class FilaPrioridade {
-    constructor() {
-        this.heap = new MaxHeap();
-    }
+// Teste
+const grafo = new Grafo();
+grafo.adicionarAresta('A', 'B');
+grafo.adicionarAresta('A', 'C');
+grafo.adicionarAresta('B', 'D');
+grafo.adicionarAresta('C', 'D');
+grafo.adicionarAresta('C', 'E');
+grafo.exibir();
+// A -> B, C
+// B -> A, D
+// C -> A, D, E
+// D -> B, C
+// E -> C
 
-    enqueue(valor) {
-        this.heap.inserir(valor);
-    }
+console.log('\n--- DFS ---');
+grafo.dfs('A');
 
-    dequeue() {
-        return this.heap.removerMaior();
-    }
-}
-
-// Testes
-const heap = new MaxHeap();
-heap.inserir(30);
-heap.inserir(10);
-heap.inserir(50);
-heap.inserir(20);
-console.log('Heap array:', heap.heap); // [50,20,30,10]
-console.log('Remover maior:', heap.removerMaior()); // 50
-console.log('Heap após remoção:', heap.heap); // [30,20,10]
-
-const fp = new FilaPrioridade();
-fp.enqueue(5);
-fp.enqueue(9);
-fp.enqueue(1);
-console.log('Fila prioridade dequeue:', fp.dequeue()); // 9
-console.log('Fila prioridade dequeue:', fp.dequeue()); // 5
+console.log('\n--- BFS ---');
+grafo.bfs('A');

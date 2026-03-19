@@ -1,62 +1,83 @@
-class HashAberto {
+// 3. Tabela Hash com Endereçamento Aberto (Probing Linear)
+
+class TabelaHashProbing {
     constructor(tamanho = 10) {
         this.tamanho = tamanho;
-        this.tabela = new Array(tamanho).fill(null); // cada posição: {chave, valor} ou null
-        this.ocupados = 0;
+        this.tabela = new Array(tamanho).fill(null); // cada posição: null ou {key, value}
     }
 
-    hash(chave) {
-        if (typeof chave === 'number') return chave % this.tamanho;
-        let soma = 0;
-        for (let i = 0; i < chave.length; i++) soma += chave.charCodeAt(i);
-        return soma % this.tamanho;
+    _hash(key) {
+        return key % this.tamanho;
     }
 
-    inserir(chave, valor) {
-        if (this.ocupados >= this.tamanho) {
-            console.log('Tabela cheia!');
-            return false;
+    inserir(key, value) {
+        let index = this._hash(key);
+        const inicio = index;
+        while (this.tabela[index] !== null) {
+            // Se a chave já existe, atualiza
+            if (this.tabela[index] && this.tabela[index].key === key) {
+                this.tabela[index].value = value;
+                return;
+            }
+            index = (index + 1) % this.tamanho;
+            if (index === inicio) {
+                throw new Error('Tabela hash cheia');
+            }
         }
-        let indice = this.hash(chave);
-        while (this.tabela[indice] !== null && this.tabela[indice].chave !== chave) {
-            indice = (indice + 1) % this.tamanho; // probing linear
-        }
-        if (this.tabela[indice] === null) {
-            this.ocupados++;
-        }
-        this.tabela[indice] = { chave, valor };
-        return true;
+        this.tabela[index] = { key, value };
     }
 
-    buscar(chave) {
-        let indice = this.hash(chave);
-        let tentativas = 0;
-        while (this.tabela[indice] !== null && tentativas < this.tamanho) {
-            if (this.tabela[indice].chave === chave) return this.tabela[indice].valor;
-            indice = (indice + 1) % this.tamanho;
-            tentativas++;
+    buscar(key) {
+        let index = this._hash(key);
+        const inicio = index;
+        while (this.tabela[index] !== null) {
+            if (this.tabela[index] && this.tabela[index].key === key) {
+                return this.tabela[index].value;
+            }
+            index = (index + 1) % this.tamanho;
+            if (index === inicio) break;
         }
         return null;
     }
 
-    remover(chave) {
-        // Para probing linear, remoção é mais complicada (marcar como deletado). Simplificaremos marcando null e reocupando depois? 
-        // Para manter simples, não implementaremos remoção real neste exemplo.
+    remover(key) {
+        // Remoção com lazy deletion (marca como null)
+        let index = this._hash(key);
+        const inicio = index;
+        while (this.tabela[index] !== null) {
+            if (this.tabela[index] && this.tabela[index].key === key) {
+                this.tabela[index] = null;
+                return true;
+            }
+            index = (index + 1) % this.tamanho;
+            if (index === inicio) break;
+        }
         return false;
     }
 
-    fatorCarga() {
-        return this.ocupados / this.tamanho;
+    exibir() {
+        for (let i = 0; i < this.tamanho; i++) {
+            if (this.tabela[i] !== null) {
+                console.log(`[${i}] -> (${this.tabela[i].key}:${this.tabela[i].value})`);
+            } else {
+                console.log(`[${i}] -> vazio`);
+            }
+        }
     }
 }
 
-// Teste
-const hashAberto = new HashAberto(5);
-hashAberto.inserir('a', 1);
-hashAberto.inserir('b', 2);
-hashAberto.inserir('c', 3);
-hashAberto.inserir('d', 4);
-hashAberto.inserir('e', 5);
-console.log('Tentativa inserir f:', hashAberto.inserir('f', 6)); // false (cheia)
-console.log('Buscar c:', hashAberto.buscar('c')); // 3
-console.log('Fator de carga:', hashAberto.fatorCarga()); // 1
+// Testes
+const hashProb = new TabelaHashProbing(10);
+hashProb.inserir(15, 'quinze');
+hashProb.inserir(25, 'vinte e cinco');
+hashProb.inserir(35, 'trinta e cinco');
+hashProb.inserir(45, 'quarenta e cinco');
+hashProb.inserir(5, 'cinco'); // colide e vai para próximo livre
+hashProb.exibir();
+
+console.log('\nBuscar 25:', hashProb.buscar(25));
+console.log('Buscar 99:', hashProb.buscar(99));
+
+hashProb.remover(15);
+console.log('\nApós remover 15 (lazy deletion):');
+hashProb.exibir();

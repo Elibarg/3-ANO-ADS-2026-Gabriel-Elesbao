@@ -37,7 +37,7 @@ Todos os exemplos foram implementados em **JavaScript**.
 Navegue até a pasta `tabelas-hash` e execute cada arquivo com Node.js:
 
 ```bash
-cd "tabelas-hash"
+cd "Estrutura de Dados/tabelas-hash"
 node atividade1.js
 node atividade2.js
 node atividade3.js
