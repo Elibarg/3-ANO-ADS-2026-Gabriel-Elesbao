@@ -43,7 +43,7 @@ Todos os exemplos foram implementados em **JavaScript**.
 Navegue até a pasta `dados-nao-lineares` e execute cada arquivo com Node.js:
 
 ```bash
-cd "Estrutura de Dados/dados-nao-lineares"
+cd "Qualidade de Software/Estrutura de Dados/dados-nao-lineares"
 node atividade1.js
 node atividade2.js
 node atividade3.js

@@ -35,7 +35,7 @@ Todos os exemplos foram implementados em **JavaScript**.
 Navegue até a pasta `algoritmos-ordenacao` e execute cada arquivo com Node.js:
 
 ```bash
-cd "Estrutura de Dados/algoritmos-ordenacao"
+cd "Qualidade de Software/Estrutura de Dados/algoritmos-ordenacao"
 node atividade1.js
 node atividade2.js
 node atividade3.js

@@ -47,7 +47,7 @@ Todos os exemplos foram implementados em **JavaScript**.
 Navegue até a pasta `dados-lineares` e execute cada arquivo com Node.js:
 
 ```bash
-cd "Estrutura de Dados/dados-lineares"
+cd "Qualidade de Software/Estrutura de Dados/dados-lineares"
 node atividade1.js
 node atividade2.js
 node atividade3.js
