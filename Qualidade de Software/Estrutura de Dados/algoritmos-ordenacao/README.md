@@ -6,8 +6,10 @@ Ordenar significa organizar elementos segundo uma regra, como crescente ou decre
 
 O algoritmo percorre a lista inteira para encontrar o menor elemento e colocá-lo na posição correta. Depois repete o processo para o restante da lista. É fácil de entender, mas não é eficiente para listas grandes, porque sua complexidade é quadrática.
 
-## Ruim:
+## Pior caso
 Sempre O(n²)
+
+-----------------------------------
 
 ## Insertion Sort
 
@@ -17,6 +19,8 @@ Esse método constrói a lista ordenada aos poucos. Ele pega um elemento por vez
 O(n)
 ## Pior caso
 O(n²)
+
+-----------------------------------
 
 ## Bubble Sort
 
