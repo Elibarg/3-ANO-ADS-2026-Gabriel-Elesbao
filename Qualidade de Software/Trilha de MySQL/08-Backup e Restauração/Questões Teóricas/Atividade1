@@ -1,0 +1,153 @@
+## 1. O que é backup de banco de dados e qual sua importância?
+
+Resposta:
+Backup é a criação de uma cópia de segurança dos dados e/ou estrutura do banco.
+
+Importância real:
+
+Recuperação em caso de falha
+Proteção contra erro humano
+Defesa contra ataques (ex: ransomware)
+Continuidade do sistema
+
+Sem backup:
+Você não tem recuperação — você tem prejuízo.
+
+## 2. Quais são os principais tipos de falhas que um backup ajuda a mitigar?
+
+Resposta:
+
+Falha de hardware (HD queimado, servidor caiu)
+Erro humano (DELETE sem WHERE, DROP TABLE)
+Ataques (ransomware, invasões)
+Atualizações mal feitas
+
+Resumo:
+Backup existe porque erro é inevitável.
+
+## 3. O que é o mysqldump e para que ele é utilizado?
+
+Resposta:
+mysqldump é uma ferramenta do MySQL usada para exportar banco de dados em forma de script SQL.
+
+Ele gera:
+
+Estrutura (CREATE TABLE)
+Dados (INSERT)
+
+Exemplo:
+
+mysqldump -u usuario -p nome_do_banco > backup.sql
+
+Uso:
+
+Backup
+Migração
+Versionamento de dados
+## 4. Como realizar o backup de um banco de dados completo?
+
+Resposta:
+
+Comando:
+
+mysqldump -u usuario -p banco > backup.sql
+
+O que acontece:
+
+Todo o banco é exportado
+Arquivo .sql contém estrutura + dados
+
+Esse arquivo pode recriar o banco inteiro.
+
+## 5. É possível fazer backup de tabelas específicas? Como?
+
+Resposta:
+Sim.
+
+Exemplo:
+
+mysqldump -u usuario -p banco tabela1 tabela2 > backup.sql
+
+Uso:
+
+Backup parcial
+Testes
+Migração seletiva
+6. Como restaurar um backup no MySQL?
+
+Resposta:
+
+Comando:
+
+mysql -u usuario -p banco < backup.sql
+
+O que acontece:
+
+O MySQL executa o script
+Recria tabelas e dados
+
+Importante:
+
+Se o banco já existir, pode sobrescrever dados.
+
+## 7. Qual a diferença entre backup lógico e backup físico?
+
+Resposta:
+
+Backup lógico:
+Exporta dados como comandos SQL
+Ex: mysqldump
+Mais flexível
+Mais lento
+Backup físico:
+Copia arquivos do banco diretamente
+Mais rápido
+Menos flexível
+
+Resumo:
+
+Lógico → portável
+Físico → rápido
+## 8. O que é exportação e importação de dados?
+
+Resposta:
+
+Exportação → extrair dados do banco
+Importação → inserir dados no banco
+
+Usos:
+
+Integração com outros sistemas
+Migração de banco
+Análise externa
+## 9. Por que é importante testar backups regularmente?
+
+Resposta:
+Porque backup que não funciona = backup inútil.
+
+Problema comum:
+
+Backup corrompido
+Script incompleto
+Falha na restauração
+
+Boa prática:
+
+Restaurar periodicamente em ambiente de teste
+
+Resumo brutal:
+Você não testa backup quando precisa — você testa antes de precisar.
+
+## 10. Quais são boas práticas para estratégias de backup?
+
+Resposta:
+
+Fazer backups regulares (diários/semanal)
+Armazenar em locais diferentes
+Automatizar processos
+Testar restauração
+Manter histórico de backups
+
+Regra de ouro:
+
+Se você tem só um backup → você não tem backup.
