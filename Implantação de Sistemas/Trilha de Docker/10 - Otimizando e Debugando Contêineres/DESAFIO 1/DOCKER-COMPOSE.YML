@@ -1,0 +1,127 @@
+# ============================================================
+# DOCKER-COMPOSE.YML — Desafio 1: PHP + Nginx + MySQL + Composer
+# Módulo 10 | Trilha de Docker | UniSENAI 2026
+# ============================================================
+# Arquitetura:
+#   Usuário → Nginx (porta 80) → PHP-FPM (porta 9000) → MySQL (porta 3306)
+#
+# Para subir: docker compose up -d --build
+# Para derrubar: docker compose down
+# Para ver logs: docker compose logs -f
+
+version: '3.8'
+
+services:
+
+  # ── SERVIÇO 1: Nginx (servidor web / proxy FastCGI) ─────────
+  nginx:
+    # image → usa imagem oficial do Nginx em versão Alpine (leve)
+    image: nginx:alpine
+
+    container_name: php_nginx
+
+    # ports → expõe a porta 80 do contêiner como porta 80 do host
+    # O usuário acessa localhost:80 e chega ao Nginx
+    ports:
+      - "80:80"
+
+    # volumes → injeta arquivos de configuração e código no contêiner Nginx
+    # ./nginx/nginx.conf → nossa configuração customizada substitui a padrão
+    # ./php → o código PHP também precisa estar acessível ao Nginx
+    #         para que ele sirva arquivos estáticos (.css, .js, imagens)
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  # :ro = somente leitura
+      - ./php:/var/www/html:ro                        # código da aplicação
+
+    # depends_on → Nginx só inicia após o PHP-FPM estar no ar
+    # Sem isso, o Nginx tentaria fazer fastcgi_pass para um serviço inexistente
+    depends_on:
+      - php
+
+    networks:
+      - php_network
+
+    restart: unless-stopped
+
+  # ── SERVIÇO 2: PHP-FPM (processador PHP) ────────────────────
+  php:
+    # build → constrói a imagem a partir do Dockerfile na pasta ./php
+    build:
+      context: ./php       # pasta onde está o Dockerfile do PHP
+      dockerfile: Dockerfile
+
+    container_name: php_fpm
+
+    # ports → PHP-FPM roda na 9000, mas NÃO precisa ser exposta ao host
+    # A comunicação é interna: Nginx → PHP-FPM via rede Docker
+    # Exposição aqui é apenas para debug eventual
+    expose:
+      - "9000"
+
+    # volumes → monta o código-fonte PHP no mesmo caminho que o Nginx usa
+    # Assim o PHP-FPM processa os mesmos arquivos que o Nginx referencia
+    volumes:
+      - ./php:/var/www/html
+
+    # environment → variáveis de ambiente para conexão com o banco
+    # O código PHP lê essas variáveis via $_ENV['DB_HOST'], getenv(), etc.
+    environment:
+      - DB_HOST=mysql        # nome do serviço MySQL (DNS interno do Docker)
+      - DB_PORT=3306         # porta padrão do MySQL
+      - DB_NAME=app_db       # banco de dados a ser usado
+      - DB_USER=appuser      # usuário com acesso ao banco
+      - DB_PASSWORD=senha123 # senha do usuário
+
+    depends_on:
+      - mysql
+
+    networks:
+      - php_network
+
+    restart: unless-stopped
+
+  # ── SERVIÇO 3: MySQL (banco de dados) ───────────────────────
+  mysql:
+    # image → usa MySQL versão 8.0 oficial
+    image: mysql:8.0
+
+    container_name: php_mysql
+
+    # environment → configurações iniciais do MySQL
+    # Essas variáveis são lidas pelo entrypoint da imagem na primeira execução
+    # para criar o banco, usuário e definir senhas automaticamente
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootSenha456  # senha do superusuário root
+      - MYSQL_DATABASE=app_db             # banco criado automaticamente
+      - MYSQL_USER=appuser                # usuário para a aplicação
+      - MYSQL_PASSWORD=senha123           # senha do usuário da aplicação
+
+    # ports → expõe MySQL para o host (útil para acessar via MySQL Workbench)
+    # Em produção real, geralmente omite-se esta linha por segurança
+    ports:
+      - "3306:3306"
+
+    # volumes → persiste os dados do banco no volume nomeado "mysql_data"
+    # /var/lib/mysql → caminho interno onde o MySQL armazena os dados
+    # Sem isso, todos os dados somem ao remover o contêiner!
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - php_network
+
+    restart: unless-stopped
+
+# ── VOLUMES NOMEADOS ─────────────────────────────────────────
+# Define o volume para persistência dos dados do MySQL
+# Sobrevive ao "docker compose down" (só remove com "docker compose down -v")
+volumes:
+  mysql_data:
+    driver: local
+
+# ── REDE INTERNA ─────────────────────────────────────────────
+# Rede bridge isolada para os três serviços se comunicarem
+# Nenhum outro serviço externo consegue acessar diretamente
+networks:
+  php_network:
+    driver: bridge

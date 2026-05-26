@@ -1,0 +1,54 @@
+# ============================================================
+# DOCKERFILE — Backend Node.js (API REST)
+# Desafio 2 | Módulo 10 | Trilha de Docker | UniSENAI 2026
+# ============================================================
+# Usa Multi-Stage Build: técnica avançada para criar imagens menores.
+# ESTÁGIO 1 → instala dependências (imagem grande com ferramentas de build)
+# ESTÁGIO 2 → copia apenas o necessário para a imagem final (bem menor)
+
+# ── ESTÁGIO 1: Instalação de dependências ───────────────────
+# AS builder → nomeia este estágio para referenciar depois
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copia os arquivos de dependências primeiro (cache de camadas)
+# Se package.json não mudar, o npm install é ignorado nos próximos builds
+COPY package*.json ./
+
+# npm ci → como "npm install", mas mais rígido e rápido para CI/CD
+# Usa exatamente as versões do package-lock.json (sem atualizar versões)
+# --only=production → não instala devDependencies (eslint, jest, etc.)
+RUN npm ci --only=production
+
+# ── ESTÁGIO 2: Imagem final de produção ─────────────────────
+# Começa do zero com a mesma imagem base limpa
+FROM node:18-alpine
+
+# Cria um usuário não-root para rodar a aplicação
+# Boa prática de segurança: evitar rodar como root dentro do contêiner
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /app
+
+# COPY --from=builder → copia apenas a pasta node_modules do estágio anterior
+# Não precisamos das ferramentas de build, apenas das dependências instaladas
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copia o código-fonte da API
+COPY . .
+
+# Define o proprietário dos arquivos como o usuário criado
+RUN chown -R appuser:appgroup /app
+
+# Troca para o usuário não-root (segurança)
+USER appuser
+
+# Variáveis de ambiente padrão (sobrescritas pelo docker-compose)
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+# CMD → inicia a API Node.js
+CMD ["node", "server.js"]

@@ -1,0 +1,148 @@
+# ============================================================
+# DOCKER-COMPOSE.YML — Desafio 2: Vue + Nginx + Node.js + MySQL
+# Módulo 10 | Trilha de Docker | UniSENAI 2026
+# ============================================================
+# Arquitetura de serviços:
+#
+#   [Navegador]
+#       ↓ porta 80
+#   [Nginx] ──── GET /        → serve /usr/share/nginx/html (build Vue)
+#       │    └── GET /api/*   → proxy para [Backend Node.js :3000]
+#       │                                       ↓
+#       │                               [MySQL :3306]
+#       └── Build Vue (frontend) roda no build e gera os estáticos
+#
+# Para subir: docker compose up -d --build
+# Para ver logs em tempo real: docker compose logs -f backend
+# Para acessar o banco: docker compose exec mysql mysql -u appuser -p app_db
+
+version: '3.8'
+
+services:
+
+  # ── SERVIÇO 1: Nginx (ponto de entrada de todo o tráfego) ───
+  nginx:
+    image: nginx:alpine
+    container_name: vue_nginx
+
+    # ports → única porta exposta ao host (80)
+    # Todo o resto da comunicação é interna via rede Docker
+    ports:
+      - "80:80"
+
+    volumes:
+      # Configuração do Nginx (proxy reverso + SPA)
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+      # Arquivos estáticos do build Vue
+      # O serviço "frontend" gera os arquivos e monta o mesmo volume
+      - vue_build:/usr/share/nginx/html:ro
+
+    depends_on:
+      - frontend   # aguarda o build do Vue terminar antes de servir
+      - backend    # aguarda a API estar no ar antes de fazer proxy
+
+    networks:
+      - app_network
+
+    restart: unless-stopped
+
+  # ── SERVIÇO 2: Frontend Vue (multi-stage build) ──────────────
+  frontend:
+    # build → constrói usando o Dockerfile multi-stage do Vue
+    # O Estágio 1 compila o Vue; o Estágio 2 coloca no Nginx
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: vue_frontend
+
+    # volumes → compartilha o resultado do build (dist/) com o Nginx
+    # O volume "vue_build" é preenchido pelo frontend e lido pelo nginx
+    volumes:
+      - vue_build:/usr/share/nginx/html
+
+    # VITE_API_URL → variável de ambiente injetada no momento do BUILD do Vue
+    # O Vite a expõe no código como import.meta.env.VITE_API_URL
+    # Como o Vue é compilado para JS estático, as variáveis são incorporadas
+    # no bundle — não ficam acessíveis em tempo de execução como no Node.js
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=/api    # URL base da API usada pelo código Vue
+
+    networks:
+      - app_network
+
+  # ── SERVIÇO 3: Backend Node.js (API REST) ───────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: vue_backend
+
+    # expose → torna a porta 3000 acessível APENAS dentro da rede Docker
+    # Diferente de "ports": não cria mapeamento para o host
+    # O Nginx acessa via http://backend:3000 internamente
+    expose:
+      - "3000"
+
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=mysql          # nome do serviço MySQL (DNS interno Docker)
+      - DB_PORT=3306
+      - DB_NAME=app_db
+      - DB_USER=appuser
+      - DB_PASSWORD=senha123
+
+    depends_on:
+      - mysql
+
+    networks:
+      - app_network
+
+    restart: unless-stopped
+
+  # ── SERVIÇO 4: MySQL (banco de dados) ───────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: vue_mysql
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootSenha789
+      - MYSQL_DATABASE=app_db
+      - MYSQL_USER=appuser
+      - MYSQL_PASSWORD=senha123
+
+    # volumes → persiste os dados do banco E roda script de inicialização
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Opcional: script SQL executado na primeira inicialização do banco
+      # - ./backend/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+
+    # NÃO exponha o MySQL ao host em produção (apenas internamente via expose)
+    expose:
+      - "3306"
+
+    networks:
+      - app_network
+
+    restart: unless-stopped
+
+# ── VOLUMES ──────────────────────────────────────────────────
+volumes:
+  # mysql_data → persiste os dados do banco entre restarts
+  mysql_data:
+    driver: local
+
+  # vue_build → volume compartilhado entre "frontend" (escreve) e "nginx" (lê)
+  # O build do Vue gera os arquivos estáticos aqui, e o Nginx os serve
+  vue_build:
+    driver: local
+
+# ── REDE ─────────────────────────────────────────────────────
+networks:
+  app_network:
+    driver: bridge

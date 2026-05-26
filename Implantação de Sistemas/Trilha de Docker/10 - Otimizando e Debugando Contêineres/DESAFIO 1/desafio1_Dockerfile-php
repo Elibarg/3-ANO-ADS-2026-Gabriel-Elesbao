@@ -1,0 +1,64 @@
+# ============================================================
+# DOCKERFILE — Serviço PHP com PHP-FPM + Composer
+# ============================================================
+# PHP-FPM (FastCGI Process Manager) é a forma correta de rodar PHP
+# junto com Nginx. O Nginx recebe a requisição HTTP e a repassa ao
+# PHP-FPM via protocolo FastCGI para processar o código PHP.
+
+# FROM → imagem base oficial do PHP com FPM integrado
+# php:8.2-fpm → versão 8.2 com o gerenciador de processos FastCGI embutido
+# A variante "-fpm" é diferente de "php:8.2-cli" (só linha de comando)
+FROM php:8.2-fpm
+
+# RUN apt-get update → atualiza o índice de pacotes do Debian (base da imagem)
+# apt-get install -y → instala pacotes sem pedir confirmação
+#   libpdo-mysql    → biblioteca C necessária para compilar a extensão PDO MySQL
+#   libzip-dev      → biblioteca para suporte a arquivos ZIP (usada por extensões)
+#   unzip           → utilitário para descompactar arquivos (necessário ao Composer)
+#   curl            → ferramenta para fazer requisições HTTP (baixar o Composer)
+# && rm -rf /var/lib/apt/lists/* → limpa o cache do apt para reduzir tamanho da imagem
+RUN apt-get update && apt-get install -y \
+    libpdo-mysql-dev \
+    libzip-dev \
+    unzip \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# docker-php-ext-install → script utilitário oficial das imagens PHP do Docker
+# Instala e habilita extensões PHP compilando-as a partir do código fonte
+# pdo_mysql → permite ao PHP se conectar a bancos MySQL via PDO (PHP Data Objects)
+# zip       → habilita suporte a manipulação de arquivos .zip no PHP
+RUN docker-php-ext-install pdo_mysql zip
+
+# Instala o Composer — gerenciador de dependências do PHP (equivalente ao npm do Node)
+# curl -sS → baixa silenciosamente o instalador oficial do Composer
+# php       → executa o instalador com o PHP local
+# -- --install-dir=/usr/local/bin → instala o executável em pasta no PATH
+# --filename=composer → nome do executável final
+RUN curl -sS https://getcomposer.org/installer | \
+    php -- --install-dir=/usr/local/bin --filename=composer
+
+# WORKDIR → define /var/www/html como diretório de trabalho
+# É o caminho padrão que o Nginx e o PHP-FPM esperam para servir arquivos PHP
+WORKDIR /var/www/html
+
+# COPY → copia os arquivos da aplicação do host para o contêiner
+# composer.json e composer.lock são copiados primeiro (cache de camadas)
+COPY composer*.json ./
+
+# RUN composer install → instala as dependências PHP listadas no composer.json
+# --no-dev          → não instala pacotes de desenvolvimento em produção
+# --optimize-autoloader → gera autoload otimizado (mais rápido em produção)
+RUN composer install --no-dev --optimize-autoloader
+
+# Copia o restante do código-fonte da aplicação
+COPY . .
+
+# EXPOSE → documenta que o PHP-FPM escuta na porta 9000
+# O Nginx se conecta ao PHP-FPM nessa porta via FastCGI (internamente)
+EXPOSE 9000
+
+# CMD → inicia o PHP-FPM em modo foreground (não como daemon)
+# php-fpm → processo principal
+# -F      → foreground: mantém o processo no primeiro plano (necessário no Docker)
+CMD ["php-fpm", "-F"]
