@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: API Biblioteca Digital
+  version: 1.0.0
+  description: API para gerenciamento de livros e empréstimos
+
+paths:
+  /livros:
+    get:
+      summary: Listar todos os livros
+      responses:
+        '200':
+          description: Lista retornada com sucesso
+
+  /emprestimos:
+    post:
+      summary: Realizar novo empréstimo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario_id: { type: integer }
+                livro_id: { type: integer }
+      responses:
+        '201':
+          description: Empréstimo realizado

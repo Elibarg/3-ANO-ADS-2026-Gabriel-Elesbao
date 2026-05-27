@@ -1,0 +1,2 @@
+# Instalar o plugin
+pip install mkdocs-meta-descriptions-plugin

@@ -1,0 +1,15 @@
+site_name: 'Meu Projeto Docs'
+
+theme:
+  name: material
+  palette:
+    primary: indigo      # Cor principal (barra superior, links, etc.)
+    accent: orange       # Cor de destaque (botões, hover, etc.)
+
+  features:
+    - content.code.copy
+    - navigation.tabs
+    - toc.integrate
+nav:
+  - Home: index.md
+  - Sobre: sobre.md

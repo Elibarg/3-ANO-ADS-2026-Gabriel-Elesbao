@@ -1,0 +1,36 @@
+openapi: 3.0.0
+
+info:
+  title: API Gerenciamento de Usuários
+  version: 1.0.0
+  description: API fictícia para documentação automatizada
+
+paths:
+
+  /usuarios:
+    get:
+      summary: Lista usuários
+
+      responses:
+        "200":
+          description: Lista retornada com sucesso
+
+    post:
+      summary: Cria usuário
+
+      responses:
+        "201":
+          description: Usuário criado
+
+  /usuarios/{id}:
+    put:
+      summary: Atualiza usuário
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+      responses:
+        "200":
+          description: Usuário atualizado

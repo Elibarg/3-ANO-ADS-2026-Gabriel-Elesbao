@@ -1,0 +1,20 @@
+# Nome do site
+site_name: 'Documentação do Meu Projeto'
+
+# Descrição opcional
+site_description: 'Documentação técnica criada com MKDocs'
+
+# Tema (Material é o mais recomendado)
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+
+# Navegação personalizada
+nav:
+  - Home: index.md
+  - Sobre: sobre.md
+  - Configuração: configuracao.md

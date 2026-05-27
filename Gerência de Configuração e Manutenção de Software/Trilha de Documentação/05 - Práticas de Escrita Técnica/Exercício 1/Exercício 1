@@ -1,0 +1,8 @@
+Instalação do Git
+
+Acesse o site oficial: git-scm.com.
+Baixe a versão para o seu sistema operacional.
+Execute o instalador.
+Siga as opções recomendadas e clique em Next até finalizar.
+Abra o terminal e verifique com o comando
+git --version

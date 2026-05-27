@@ -1,0 +1,18 @@
+# 1. Verificar se o Python está instalado
+python --version
+# ou
+python3 --version
+
+# 2. Instalar o MKDocs (usando pip)
+pip install mkdocs
+# ou (mais recomendado em alguns sistemas)
+pip3 install mkdocs
+
+# 3. Instalar o tema Material (mais bonito e moderno)
+pip install mkdocs-material
+
+# 4. Criar um novo projeto chamado "Documentação do Meu Projeto"
+mkdocs new "Documentação do Meu Projeto"
+
+# 5. Entrar na pasta do projeto
+cd "Documentação do Meu Projeto"

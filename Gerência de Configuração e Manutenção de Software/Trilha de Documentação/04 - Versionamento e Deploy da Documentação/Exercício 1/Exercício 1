@@ -1,0 +1,10 @@
+O uso de sistemas de controle de versão como o Git é fundamental na documentação técnica por vários motivos:
+
+Histórico completo: Permite ver quem alterou o que e quando.
+Reversão de mudanças: Caso algo dê errado, é possível voltar para uma versão anterior.
+Trabalho em equipe: Várias pessoas podem trabalhar na mesma documentação sem sobrescrever o trabalho dos outros.
+Backup seguro: A documentação fica armazenada na nuvem (GitHub, GitLab, etc.).
+Auditoria: Facilita o rastreamento de alterações e cumprimento de boas práticas.
+Integração com CI/CD: Permite deploy automático toda vez que houver uma alteração.
+
+Em resumo, Git transforma a documentação em algo profissional, colaborativo e confiável.

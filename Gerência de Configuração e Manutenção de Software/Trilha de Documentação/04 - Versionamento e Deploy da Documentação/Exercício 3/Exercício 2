@@ -1,0 +1,4 @@
+pip install mkdocs-material "mkdocs[material]"
+
+# Comando que faz build + deploy automático para GitHub Pages
+mkdocs gh-deploy --force

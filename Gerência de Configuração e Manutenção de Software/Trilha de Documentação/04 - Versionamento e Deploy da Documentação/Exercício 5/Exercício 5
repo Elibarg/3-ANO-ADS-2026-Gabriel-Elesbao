@@ -1,0 +1,17 @@
+pip install mike
+
+plugins:
+  - search
+  - mike
+
+# Criar versão 1.0
+mike deploy 1.0 latest --push
+
+# Criar versão 2.0
+mike deploy 2.0
+
+# Definir qual versão aparece por padrão
+mike set-default latest
+
+# Listar versões
+mike list

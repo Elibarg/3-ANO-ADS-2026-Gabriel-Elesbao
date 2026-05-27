@@ -1,0 +1,11 @@
+Resposta:
+O MKDocs é uma ferramenta de geração de sites de documentação estática, escrita em Python, que utiliza arquivos Markdown como fonte. Ele transforma esses arquivos em um site bonito e navegável em HTML estático.
+Principais vantagens:
+
+Simplicidade: usa Markdown, fácil de aprender.
+Rápido: gera documentação estática (rápida de carregar).
+Servidor local com preview em tempo real (mkdocs serve).
+Temas bonitos (principalmente o Material for MkDocs).
+Fácil de versionar com Git.
+Não precisa de banco de dados ou servidor complexo — só HTML.
+Ótimo para documentação de projetos de software, APIs, bibliotecas, etc.

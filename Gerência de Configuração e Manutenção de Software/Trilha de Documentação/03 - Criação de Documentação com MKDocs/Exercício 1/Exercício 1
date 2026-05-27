@@ -1,0 +1,8 @@
+meu-projeto/
+├── mkdocs.yml          # Arquivo de configuração principal do site
+└── docs/               # Pasta onde ficam todos os arquivos Markdown
+    └── index.md        # Página inicial (home) da documentação
+    
+mkdocs.ym:	Define nome do site, tema, navegação, plugins, etc.
+docs/:	Diretório raiz de todo o conteúdo em Markdown
+index.md:	Página principal; geralmente a introdução do projeto

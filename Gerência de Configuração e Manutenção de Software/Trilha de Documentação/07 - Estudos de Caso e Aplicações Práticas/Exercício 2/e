@@ -1,0 +1,27 @@
+| Membro  | Responsabilidade         |
+| ------- | ------------------------ |
+| Aluno 1 | Instalação do sistema    |
+| Aluno 2 | Configuração do ambiente |
+| Aluno 3 | Documentação da API      |
+| Aluno 4 | Tutoriais e revisão      |
+
+Comandos Git utilizados
+
+Inicializar repositório:
+# cria um repositório Git local
+git init
+
+Adicionar arquivos:
+# adiciona todos os arquivos para versionamento
+git add .
+
+Criar commit:
+# salva uma versão do projeto
+
+# -m
+# adiciona mensagem ao commit
+git commit -m "Documentação inicial"
+
+Enviar para GitHub:
+# envia alterações para o repositório remoto
+git push origin main

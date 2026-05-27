@@ -1,0 +1,40 @@
+openapi: 3.0.0
+
+info:
+  title: API Produtos
+  version: 1.0
+
+paths:
+
+  /produtos:
+
+    get:
+      summary: Listar produtos
+
+    post:
+      summary: Criar produto
+
+  /produtos/{id}:
+
+    delete:
+
+      summary: Excluir produto
+
+      parameters:
+
+        - name: id
+
+          in: path
+
+          required: true
+
+          schema:
+            type: integer
+
+      responses:
+
+        '200':
+          description: Produto removido
+
+          # Atualizar a visualização local
+mkdocs serve

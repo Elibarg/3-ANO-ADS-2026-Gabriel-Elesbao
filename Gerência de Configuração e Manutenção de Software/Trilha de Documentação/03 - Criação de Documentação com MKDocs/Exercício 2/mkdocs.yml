@@ -1,0 +1,7 @@
+site_name: 'Meu Projeto Docs'
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Sobre: sobre.md

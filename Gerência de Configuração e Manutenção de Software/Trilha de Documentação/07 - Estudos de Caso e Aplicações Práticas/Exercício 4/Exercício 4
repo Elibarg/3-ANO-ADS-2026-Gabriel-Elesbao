@@ -1,0 +1,31 @@
+1. Criando um repositório e configurando proteção de branch (via GitHub):
+Settings → Branches → Add branch protection rule
+- Branch name pattern: main
+- Require a pull request before merging
+- Require approvals (mínimo 1)
+- Dismiss stale pull request approvals when new changes are pushed
+
+2. Fluxo de contribuição para a documentação:
+# Membro A: cria uma branch para sua contribuição
+git checkout -b docs/atualiza-instalacao
+git add docs/instalacao.md
+git commit -m "docs: adiciona passo a passo para instalação no Ubuntu"
+git push origin docs/atualiza-instalacao
+
+# No GitHub: abre um Pull Request (PR) comparando docs/atualiza-instalacao → main
+
+# Membro B (revisor): revisa o PR
+git fetch origin
+git checkout docs/atualiza-instalacao
+mkdocs serve   # visualiza as mudanças localmente
+
+# Revisor comenta no PR:
+# - "Ótimo conteúdo! Apenas sugiro adicionar um passo sobre permissões."
+# - "Verifique a formatação do código na linha 15."
+
+# Membro A: faz ajustes
+git add .
+git commit -m "docs: ajustes após revisão"
+git push
+
+# Revisor aprova e faz merge

@@ -1,0 +1,32 @@
+mkdocs new "Biblioteca-Docs"
+cd Biblioteca-Docs
+
+# Instalar tema moderno
+pip install mkdocs-material
+
+docs/
+├── index.md
+├── instalacao.md
+├── configuracao.md
+├── api/
+│   ├── openapi.yaml
+│   └── swagger-ui/
+├── usuarios.md
+└── emprestimos.md
+
+site_name: 'Biblioteca Digital - Documentação'
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: indigo
+
+nav:
+  - Home: index.md
+  - Instalação: instalacao.md
+  - Configuração: configuracao.md
+  - API:
+    - Swagger UI: api/swagger-ui/index.html
+    - Especificação: api/openapi.yaml
+  - Usuários: usuarios.md
+  - Empréstimos: emprestimos.md

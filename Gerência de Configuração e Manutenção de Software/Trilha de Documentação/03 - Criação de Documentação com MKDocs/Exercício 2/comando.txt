@@ -1,0 +1,8 @@
+# 1. Criar novo projeto
+mkdocs new "MeuProjetoDocs"
+
+# 2. Entrar na pasta
+cd MeuProjetoDocs
+
+# 3. Criar nova página
+touch docs/sobre.md

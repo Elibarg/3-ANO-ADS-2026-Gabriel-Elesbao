@@ -1,0 +1,11 @@
+site_name: API Gerenciamento de Usuários
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Usuários: usuarios.md
+  - API:
+      - Swagger UI: api/swagger-ui/index.html
+      - OpenAPI: api/openapi.yaml

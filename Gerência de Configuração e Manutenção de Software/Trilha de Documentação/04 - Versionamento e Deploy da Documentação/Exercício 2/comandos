@@ -1,0 +1,19 @@
+# 1. Criar o projeto MKDocs (caso ainda não tenha)
+mkdocs new "MinhaDocumentacao"
+cd MinhaDocumentacao
+
+# 2. Inicializar o repositório Git
+git init
+
+# 3. Adicionar o remote do GitHub (substitua pelo seu usuário e nome do repo)
+git remote add origin https://github.com/SEU_USUARIO/MinhaDocumentacao.git
+
+# 4. Adicionar todos os arquivos
+git add .
+
+# 5. Fazer o primeiro commit
+git commit -m "feat: documentação inicial com MKDocs"
+
+# 6. Enviar para o GitHub (branch main)
+git branch -M main
+git push -u origin main

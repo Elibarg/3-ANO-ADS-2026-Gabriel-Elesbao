@@ -1,0 +1,40 @@
+openapi: 3.0.0
+
+info:
+  title: API Biblioteca
+  version: 1.0
+
+paths:
+
+  /livros:
+
+    get:
+
+      summary: Listar livros
+
+      responses:
+
+        '200':
+          description: Lista de livros
+
+  /livros:
+
+    post:
+
+      summary: Criar livro
+
+      responses:
+
+        '201':
+          description: Livro criado
+
+  /livros/{id}:
+
+    put:
+
+      summary: Atualizar livro
+
+      responses:
+
+        '200':
+          description: Livro atualizado
