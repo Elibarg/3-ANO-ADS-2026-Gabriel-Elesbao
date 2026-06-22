@@ -4,7 +4,7 @@ info:
   title: API Produtos
   version: 1.0
 
-paths:
+paths: 
 
   /produtos:
 
@@ -35,6 +35,3 @@ paths:
 
         '200':
           description: Produto removido
-
-          # Atualizar a visualização local
-mkdocs serve
