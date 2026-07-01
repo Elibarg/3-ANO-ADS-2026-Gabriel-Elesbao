@@ -1,0 +1,25 @@
+<div class="card">
+
+    <h1>Posts da API JSONPlaceholder</h1>
+
+    <% posts.forEach(post => { %>
+
+        <div class="post">
+
+            <h3>
+
+                <%= post.title %>
+
+            </h3>
+
+            <p>
+
+                <%= post.body %>
+
+            </p>
+
+        </div>
+
+    <% }) %>
+
+</div>
