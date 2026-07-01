@@ -1,0 +1,79 @@
+<div class="card">
+
+<h1>Produtos</h1>
+
+<a
+class="botao"
+href="/produtos/novo">
+
+Novo Produto
+
+</a>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Nome</th>
+
+<th>Categoria</th>
+
+<th>Quantidade</th>
+
+<th>Preço</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<% produtos.forEach(produto=>{ %>
+
+<tr>
+
+<td>
+
+<%= produto.id %>
+
+</td>
+
+<td>
+
+<%= produto.nome %>
+
+</td>
+
+<td>
+
+<%= produto.categoria %>
+
+</td>
+
+<td>
+
+<%= produto.quantidade %>
+
+</td>
+
+<td>
+
+R$
+
+<%= produto.preco %>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+
+</table>
+
+</div>

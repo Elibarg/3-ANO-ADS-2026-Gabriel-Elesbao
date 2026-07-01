@@ -1,0 +1,65 @@
+<div class="card">
+
+<h1>
+
+Movimentações
+
+</h1>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Produto</th>
+
+<th>Tipo</th>
+
+<th>Quantidade</th>
+
+<th>Data</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<% movimentacoes.forEach(item=>{ %>
+
+<tr>
+
+<td>
+
+<%= item.nome %>
+
+</td>
+
+<td>
+
+<%= item.tipo %>
+
+</td>
+
+<td>
+
+<%= item.quantidade %>
+
+</td>
+
+<td>
+
+<%= item.data_movimentacao %>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+
+</table>
+
+</div>

@@ -1,0 +1,44 @@
+<div class="card">
+
+<h1>Login</h1>
+
+<% if (erro){ %>
+
+<div class="erro">
+
+<%= erro %>
+
+</div>
+
+<% } %>
+
+<form action="/login" method="POST">
+
+<input
+type="hidden"
+name="_csrf"
+value="<%= csrfToken %>">
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+required>
+
+<label>Senha</label>
+
+<input
+type="password"
+name="senha"
+required>
+
+<button>
+
+Entrar
+
+</button>
+
+</form>
+
+</div>

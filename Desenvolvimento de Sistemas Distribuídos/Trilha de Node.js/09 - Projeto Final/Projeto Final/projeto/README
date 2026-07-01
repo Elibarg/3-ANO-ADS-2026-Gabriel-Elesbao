@@ -1,0 +1,320 @@
+# Testes
+
+Durante o desenvolvimento foram realizados testes para validar o funcionamento das principais funcionalidades do sistema.
+
+## Testes realizados
+
+| Funcionalidade | Resultado |
+|---------------|-----------|
+| Login | ✔ |
+| Cadastro de Usuário | ✔ |
+| Cadastro de Produto | ✔ |
+| Atualização de Produto | ✔ |
+| Exclusão de Produto | ✔ |
+| Entrada de Estoque | ✔ |
+| Saída de Estoque | ✔ |
+| Relatórios | ✔ |
+| API REST | ✔ |
+| Swagger | ✔ |
+| Socket.io | ✔ |
+
+## Executando os testes
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Execute:
+
+```bash
+npm test
+```
+
+Saída esperada:
+
+```text
+PASS tests/produto.test.js
+
+Test Suites: 1 passed
+Tests:       1 passed
+```
+
+Os testes utilizam o framework **Jest**, responsável por validar automaticamente partes da aplicação.
+
+# Documentação Técnica
+
+## Arquitetura
+
+O projeto segue a arquitetura **MVC (Model-View-Controller)**.
+
+```
+Cliente
+      │
+      ▼
+Express
+      │
+Routes
+      │
+Controllers
+      │
+Models
+      │
+MySQL
+```
+
+## Tecnologias
+
+- Node.js
+- Express
+- MySQL
+- EJS
+- Socket.io
+- JWT
+- Swagger
+- Winston
+- Joi
+- Jest
+
+## Organização das Pastas
+
+```
+config/
+
+controllers/
+
+middlewares/
+
+models/
+
+public/
+
+routes/
+
+services/
+
+socket/
+
+tests/
+
+validators/
+
+views/
+
+workers/
+```
+
+## Banco de Dados
+
+O banco de dados é composto pelas tabelas:
+
+- usuarios
+- produtos
+- movimentacoes
+
+O acesso é realizado utilizando **mysql2** com consultas parametrizadas para evitar SQL Injection.
+
+## Segurança
+
+O sistema implementa:
+
+- JWT
+- Express Session
+- CSRF
+- Cookies HTTPOnly
+- Senhas criptografadas com Bcrypt
+- Validação utilizando Joi
+
+# Deploy
+
+O projeto pode ser publicado utilizando plataformas como:
+
+- Render
+- Railway
+- VPS Linux
+- Azure
+- AWS EC2
+
+## Build
+
+```bash
+npm install
+```
+
+## Inicialização
+
+```bash
+npm start
+```
+
+## Variáveis de Ambiente
+
+```
+PORT=3000
+
+DB_HOST=
+
+DB_PORT=
+
+DB_USER=
+
+DB_PASSWORD=
+
+DB_NAME=
+
+JWT_SECRET=
+
+SESSION_SECRET=
+```
+
+## Swagger
+
+Após o deploy:
+
+```
+https://seu-site.com/docs
+```
+
+## API
+
+```
+https://seu-site.com/api
+```
+
+# Organização do GitHub
+
+Estratégia de Branches
+
+```
+main
+
+develop
+
+feature/*
+```
+
+Exemplo
+
+```
+feature/login
+
+feature/swagger
+
+feature/produtos
+
+feature/api
+
+feature/socket
+```
+
+Fluxo de desenvolvimento
+
+```
+feature
+
+↓
+
+Commit
+
+↓
+
+Push
+
+↓
+
+Pull Request
+
+↓
+
+Code Review
+
+↓
+
+Merge
+
+↓
+
+develop
+
+↓
+
+main
+```
+
+## Commits
+
+Exemplos
+
+```
+feat: cadastro de produtos
+
+fix: correção da autenticação
+
+docs: atualização do README
+
+refactor: reorganização dos controllers
+```
+
+## Estrutura do Repositório
+
+```
+SistemaControleEstoque/
+
+config/
+
+controllers/
+
+middlewares/
+
+models/
+
+public/
+
+routes/
+
+services/
+
+socket/
+
+tests/
+
+validators/
+
+views/
+
+workers/
+
+README.md
+
+package.json
+```
+
+# Melhorias Futuras
+
+Algumas funcionalidades que poderão ser adicionadas em versões futuras:
+
+- Dashboard com gráficos.
+- Controle de fornecedores.
+- Controle de clientes.
+- Exportação de relatórios em PDF.
+- Exportação para Excel.
+- Sistema de permissões por perfil.
+- Upload de imagens dos produtos.
+- Notificações em tempo real utilizando Socket.io.
+- Docker.
+- CI/CD com GitHub Actions.
+
+# Autor
+
+**Gabriel Elesbão**
+
+Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas.
+
+Projeto desenvolvido durante a Trilha de Node.js.
+
+# Licença
+
+Este projeto foi desenvolvido para fins acadêmicos como parte da Trilha de Node.js.
+
+Seu uso é permitido para estudos e demonstrações.

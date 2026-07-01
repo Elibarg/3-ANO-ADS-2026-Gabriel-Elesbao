@@ -1,0 +1,95 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sistema de Controle de Estoque",
+    "version": "1.0.0",
+    "description": "API REST desenvolvida durante a Trilha Node.js."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "paths": {
+    "/usuarios": {
+      "get": {
+        "summary": "Lista usuários"
+      },
+      "post": {
+        "summary": "Cria usuário"
+      }
+    },
+    "/usuarios/{id}": {
+      "put": {
+        "summary": "Atualiza usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Remove usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/produtos": {
+      "get": {
+        "summary": "Lista produtos"
+      },
+      "post": {
+        "summary": "Cria um produto"
+      }
+    },
+    "/produtos/{id}": {
+      "put": {
+        "summary": "Atualiza um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Remove um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/movimentacoes": {
+      "get": {
+        "summary": "Lista movimentações de estoque"
+      },
+      "post": {
+        "summary": "Registra entrada ou saída de estoque"
+      }
+    }
+  }
+}
