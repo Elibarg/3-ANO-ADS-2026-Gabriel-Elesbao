@@ -227,3 +227,38 @@ button{
     margin-bottom:10px;
 
 }
+.post{
+
+    border-bottom:1px solid #ddd;
+
+    padding:20px 0;
+
+}
+
+.post h3{
+
+    color:#005baa;
+
+    margin-bottom:10px;
+
+}
+
+#mensagens{
+
+    height:300px;
+
+    overflow:auto;
+
+    border:1px solid #ccc;
+
+    padding:15px;
+
+    margin-bottom:20px;
+
+}
+
+#mensagens p{
+
+    margin-bottom:10px;
+
+}

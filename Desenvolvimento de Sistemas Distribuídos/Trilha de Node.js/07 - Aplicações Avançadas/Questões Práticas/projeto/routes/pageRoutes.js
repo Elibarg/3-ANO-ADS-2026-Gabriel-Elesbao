@@ -3,6 +3,8 @@ const axios = require("axios");
 
 const router = express.Router();
 
+const usuarioController = require("../controllers/usuarioController");
+
 // Página Inicial
 router.get("/", (req, res) => {
 
@@ -24,28 +26,18 @@ router.get("/about", (req, res) => {
 
 });
 
-// API Externa
-router.get("/posts", async (req, res) => {
+// API Externa (JSONPlaceholder)
+router.get("/posts", usuarioController.listarPosts);
 
-    try {
+// Worker Thread
+router.get("/worker", usuarioController.executarWorker);
 
-        const resposta = await axios.get(
-            "https://jsonplaceholder.typicode.com/posts?_limit=5"
-        );
+// Chat em Tempo Real
+router.get("/chat", (req, res) => {
 
-        res.render("posts", {
-
-            title: "Posts",
-
-            posts: resposta.data
-
-        });
-
-    } catch (erro) {
-
-        res.status(500).send("Erro ao consultar API.");
-
-    }
+    res.render("chat", {
+        title: "Chat"
+    });
 
 });
 

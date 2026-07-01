@@ -1,11 +1,20 @@
 const bcrypt = require("bcrypt");
+
 const usuarioModel = require("../models/usuarioModel");
+
+const apiService = require("../services/apiService");
+
+const workerService = require("../services/workerService");
+
+const logger = require("../config/logger");
 
 async function listar(req, res) {
 
     try {
 
         const usuarios = await usuarioModel.listarUsuarios();
+
+        logger.info("Usuários listados.");
 
         res.render("usuarios", {
 
@@ -16,6 +25,8 @@ async function listar(req, res) {
         });
 
     } catch (erro) {
+
+        logger.error(erro.message);
 
         res.status(500).send(erro.message);
 
@@ -79,9 +90,71 @@ async function criar(req, res) {
 
         );
 
+        logger.info(`Novo usuário cadastrado: ${nome}`);
+
         res.redirect("/login");
 
-    } catch (erro) {
+    }
+
+    catch (erro) {
+
+        logger.error(erro.message);
+
+        res.status(500).send(erro.message);
+
+    }
+
+}
+
+async function listarPosts(req, res) {
+
+    try {
+
+        const posts = await apiService.buscarPosts();
+
+        logger.info("Posts carregados da API.");
+
+        res.render("posts", {
+
+            title: "Posts",
+
+            posts
+
+        });
+
+    }
+
+    catch (erro) {
+
+        logger.error(erro.message);
+
+        res.status(500).send(erro.message);
+
+    }
+
+}
+
+async function executarWorker(req, res) {
+
+    try {
+
+        const resultado = await workerService.executarWorker();
+
+        logger.info("Worker executado.");
+
+        res.render("worker", {
+
+            title: "Worker Thread",
+
+            resultado
+
+        });
+
+    }
+
+    catch (erro) {
+
+        logger.error(erro.message);
 
         res.status(500).send(erro.message);
 
@@ -95,6 +168,10 @@ module.exports = {
 
     formulario,
 
-    criar
+    criar,
+
+    listarPosts,
+
+    executarWorker
 
 };
